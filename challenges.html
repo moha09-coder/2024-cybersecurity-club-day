@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cybersecurity Mini Challenges</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(0, 255, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.6);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .name-input {
+            margin-bottom: 20px;
+            text-align: center;;
+        }
+
+        .name-input input {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .box {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border: 2px solid #00ff00;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .box:hover {
+            background-color: #00ff00;
+            color: #0a0a0a;
+        }
+
+        .box.solved {
+            background-color: #4d4d4d;
+            color: #666666;
+            pointer-events: none;
+        }
+
+        .box p {
+            font-size: 1.2rem;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            color: #00ff00;
+            padding: 30px;
+            border: 2px solid #00ff00;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .modal h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #00ff00;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: red;
+        }
+
+        /* Form Input */
+        .form-group {
+            margin: 20px 0;
+        }
+
+        #hash {
+            color: whitesmoke;
+            background-color: black;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            border: 2px solid #00ff00;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            background-color: #00ff00;
+            color: #0a0a0a;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #009900;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .leaderboard table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard th, .leaderboard td {
+            border: 2px solid #00ff00;
+            padding: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .leaderboard th {
+            background-color: #1a1a1a;
+            text-transform: uppercase;
+        }
+
+        .leaderboard td {
+            background-color: #0d0d0d;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 3rem;
+            }
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .box p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .box p {
+                font-size: 0.9rem;
+            }
+            .modal-content {
+                padding: 20px;
+            }
+            #hash {
+                font-size: 0.8rem;
+            }
+            .leaderboard th, .leaderboard td {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Cybersecurity Mini Challenges</h1>
+
+    <!-- Name Input Section -->
+    <div class="name-input">
+        <label for="username">Enter your name to start:</label>
+        <input type="text" id="username" placeholder="Your name" oninput="saveUsername()">
+        <input type="submit" value="Submit" onclick="window.location.reload()">
+    </div>
+
+    <div class="grid-container">
+        <div class="box" id="challenge1" onclick="openModal('modal1')">
+            <p>Crack that password!!!</p>
+        </div>
+        <div class="box" id="challenge2" onclick="openModal('modal2')">
+            <p>Robots everywhere</p>
+        </div>
+        <div class="box" id="challenge3" onclick="openModal('modal3')">
+            <p>Red or blue? Make a choice</p>
+        </div>
+        <div class="box" id="challenge4" onclick="openModal('modal4')">
+            <p>Phishing??</p>
+        </div>
+    </div>
+
+    <!-- Modals -->
+        <!-- Modals -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>Crack that password!!!</h2>
+            <p>Does this <span id="hash">c1e6beac0d20aa67d49891143fd7dc4a5c4e7e74</span> mean anything to you?</p>
+            <form>
+                <div class="form-group">
+                    <label for="answer1">Your Answer:</label><br>
+                    <input type="text" id="answer1" placeholder="What's the password?">
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <h2>Robots everywhere</h2>
+            <p>Description TBA.</p>
+            <form>
+                <div class="form-group">
+                    <label for="answer2">Your Answer:</label><br>
+                    <input type="text" id="answer2" placeholder="Enter your answer here">
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <h2>Red or blue? Make a choice</h2>
+            <p>Description TBA.</p>
+            <form>
+                <div class="form-group">
+                    <label for="answer3">Your Answer:</label><br>
+                    <input type="text" id="answer3" placeholder="Enter your answer here">
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal4')">&times;</span>
+            <h2>Phishing??</h2>
+            <p>Description TBA.</p>
+            <form>
+                <div class="form-group">
+                    <label for="answer4">Your Answer:</label><br>
+                    <input type="text" id="answer4" placeholder="Enter your answer here">
+                </div>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard">
+        <h2>Leaderboard</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Participant</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Fetched leaderboard data will go here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Save username in localStorage
+        function saveUsername() {
+            const username = document.getElementById('username').value;
+            localStorage.setItem('username', username);
+        }
+
+        // Check for completed challenges and gray them out
+        function checkCompletedChallenges() {
+
+            if(localStorage.getItem('username')) {
+                document.querySelector(".name-input").remove();
+            };
+
+            const completedChallenges = JSON.parse(localStorage.getItem('completedChallenges')) || [];
+
+            completedChallenges.forEach(challengeId => {
+                document.getElementById(challengeId).classList.add('solved');
+            });
+
+        }
+
+        // Open modal only if username is entered
+        function openModal(modalId) {
+            const username = localStorage.getItem('username');
+            if (!username) {
+                alert('Please enter your name to start the challenges!');
+                return;
+            }
+            document.getElementById(modalId).style.display = "flex";
+        }
+
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Submit answer function
+        async function submitAnswer(challenge, answer) {
+            const username = localStorage.getItem('username');
+            const response = await fetch('/submit-answer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ challenge: challenge, answer: answer, username: username }),
+            });
+            const result = await response.json();
+            alert(result.message);
+
+            if (result.correct) {
+                // Mark challenge as solved
+                const challengeId = `challenge${result.challengeNumber}`;
+                const completedChallenges = JSON.parse(localStorage.getItem('completedChallenges')) || [];
+                if (!completedChallenges.includes(challengeId)) {
+                    completedChallenges.push(challengeId);
+                    localStorage.setItem('completedChallenges', JSON.stringify(completedChallenges));
+                }
+
+                document.getElementById(challengeId).classList.add('solved');
+            }
+        }
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const challenge = this.querySelector('h2') ? this.querySelector('h2').textContent : null;
+                const answerInput = this.querySelector('input[type="text"]');
+                const answer = answerInput ? answerInput.value : null;
+
+                // const challenge = this.querySelector('h2').textContent;
+                // const answer = this.querySelector('input[type="text"]').value;
+                submitAnswer(challenge, answer);
+            });
+        });
+
+        // Fetch leaderboard data
+        async function fetchLeaderboard() {
+            const response = await fetch('/leaderboard');
+            const leaderboardData = await response.json();
+
+            const tbody = document.querySelector('.leaderboard tbody');
+            tbody.innerHTML = ''; // Clear previous data
+            leaderboardData.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${entry.name}</td>
+                    <td>${entry.score}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Fetch leaderboard and check completed challenges on page load
+        window.onload = function() {
+            fetchLeaderboard();
+            checkCompletedChallenges();
+        };
+    </script>
+</body>
+</html>
